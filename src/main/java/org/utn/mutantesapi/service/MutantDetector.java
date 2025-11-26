@@ -2,45 +2,75 @@ package org.utn.mutantesapi.service;
 
 import org.springframework.stereotype.Component;
 
+/**
+ * Detector de mutantes basado en secuencias de ADN.
+ * Un humano es mutante si encuentra MÁS DE UNA secuencia de 4 letras iguales
+ * en cualquier dirección: horizontal, vertical o diagonal.
+ */
 @Component
 public class MutantDetector {
 
-    public boolean isMutant(String[] dna) {  // ← Corregido: isHWtant → isMutant
-        int n = dna.length;
+    private static final int SEQUENCE_LENGTH = 4;
+
+    /**
+     * Verifica si un ADN corresponde a un mutante.
+     *
+     * @param dna Array de Strings que representa la matriz de ADN (NxN)
+     * @return true si es mutante (más de 1 secuencia), false si no
+     */
+    public boolean isMutant(String[] dna) {
+        if (dna == null || dna.length == 0) {
+            return false;
+        }
+
+        final int n = dna.length;
+
+        // Convertir a matriz de chars para acceso más rápido
+        char[][] matrix = new char[n][];
+        for (int i = 0; i < n; i++) {
+            if (dna[i] == null || dna[i].length() != n) {
+                return false;
+            }
+            matrix[i] = dna[i].toCharArray();
+        }
+
         int sequenceCount = 0;
 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                // Si ya encontramos más de una secuencia, retornar inmediatamente
-                if (sequenceCount > 1) return true;
+        // Recorrer cada posición de la matriz
+        for (int row = 0; row < n; row++) {
+            for (int col = 0; col < n; col++) {
 
-                // Verificar horizontal (hacia la derecha)
-                if (j <= n - 4) {
-                    if (checkSequence(dna, i, j, 0, 1)) {
+                // Early termination: si ya encontramos 2+ secuencias, es mutante
+                if (sequenceCount > 1) {
+                    return true;
+                }
+
+                // Buscar en las 4 direcciones (sin else if para no perder secuencias)
+
+                // Horizontal →
+                if (col <= n - SEQUENCE_LENGTH) {
+                    if (checkHorizontal(matrix, row, col)) {
                         sequenceCount++;
-                        continue; // Continuar para no contar duplicados
                     }
                 }
 
-                // Verificar vertical (hacia abajo)
-                if (i <= n - 4) {
-                    if (checkSequence(dna, i, j, 1, 0)) {
+                // Vertical ↓
+                if (row <= n - SEQUENCE_LENGTH) {
+                    if (checkVertical(matrix, row, col)) {
                         sequenceCount++;
-                        continue;
                     }
                 }
 
-                // Verificar diagonal principal (abajo-derecha)
-                if (i <= n - 4 && j <= n - 4) {
-                    if (checkSequence(dna, i, j, 1, 1)) {
+                // Diagonal descendente ↘
+                if (row <= n - SEQUENCE_LENGTH && col <= n - SEQUENCE_LENGTH) {
+                    if (checkDiagonalDescending(matrix, row, col)) {
                         sequenceCount++;
-                        continue;
                     }
                 }
 
-                // Verificar diagonal secundaria (abajo-izquierda)
-                if (i <= n - 4 && j >= 3) {
-                    if (checkSequence(dna, i, j, 1, -1)) {
+                // Diagonal ascendente ↗
+                if (row >= SEQUENCE_LENGTH - 1 && col <= n - SEQUENCE_LENGTH) {
+                    if (checkDiagonalAscending(matrix, row, col)) {
                         sequenceCount++;
                     }
                 }
@@ -50,17 +80,43 @@ public class MutantDetector {
         return sequenceCount > 1;
     }
 
-    private boolean checkSequence(String[] dna, int row, int col, int rowStep, int colStep) {
-        char firstChar = dna[row].charAt(col);
+    /**
+     * Verifica secuencia horizontal desde (row, col)
+     */
+    private boolean checkHorizontal(char[][] matrix, int row, int col) {
+        final char base = matrix[row][col];
+        return matrix[row][col + 1] == base &&
+                matrix[row][col + 2] == base &&
+                matrix[row][col + 3] == base;
+    }
 
-        for (int k = 1; k < 4; k++) {
-            int currentRow = row + k * rowStep;
-            int currentCol = col + k * colStep;
+    /**
+     * Verifica secuencia vertical desde (row, col)
+     */
+    private boolean checkVertical(char[][] matrix, int row, int col) {
+        final char base = matrix[row][col];
+        return matrix[row + 1][col] == base &&
+                matrix[row + 2][col] == base &&
+                matrix[row + 3][col] == base;
+    }
 
-            if (dna[currentRow].charAt(currentCol) != firstChar) {
-                return false;
-            }
-        }
-        return true;
+    /**
+     * Verifica secuencia diagonal descendente ↘ desde (row, col)
+     */
+    private boolean checkDiagonalDescending(char[][] matrix, int row, int col) {
+        final char base = matrix[row][col];
+        return matrix[row + 1][col + 1] == base &&
+                matrix[row + 2][col + 2] == base &&
+                matrix[row + 3][col + 3] == base;
+    }
+
+    /**
+     * Verifica secuencia diagonal ascendente ↗ desde (row, col)
+     */
+    private boolean checkDiagonalAscending(char[][] matrix, int row, int col) {
+        final char base = matrix[row][col];
+        return matrix[row - 1][col + 1] == base &&
+                matrix[row - 2][col + 2] == base &&
+                matrix[row - 3][col + 3] == base;
     }
 }
