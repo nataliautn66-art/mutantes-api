@@ -8,8 +8,6 @@ WORKDIR /app
 COPY gradlew .
 COPY gradle gradle
 COPY build.gradle settings.gradle ./
-
-# Copia el código fuente
 COPY src src
 
 # Ejecuta la construcción de Gradle
