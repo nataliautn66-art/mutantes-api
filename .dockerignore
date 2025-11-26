@@ -1,0 +1,9 @@
+# Excluye cualquier carpeta de Node.js (la causa del problema)
+node_modules
+package.json
+package-lock.json
+
+# Excluye la carpeta de Git y el entorno de IntelliJ/VS Code
+.git
+.idea
+.vscode

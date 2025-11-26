@@ -1,4 +1,4 @@
-# Usa la imagen más estable para la construcción. openjdk:21 existe.
+# Usa la imagen más estable para la construcción.
 FROM openjdk:21 AS build
 
 # Establece el directorio de trabajo
@@ -15,7 +15,6 @@ RUN chmod +x gradlew
 RUN ./gradlew clean build
 
 # --- Segunda Etapa: Ejecución (Usamos la versión JRE más pequeña) ---
-# Usar 21-jre-slim-bullseye (o solo 21-jre) es mucho más fiable que el slim simple.
 FROM openjdk:21-jre
 
 # Copia el JAR compilado de la etapa 'build'
