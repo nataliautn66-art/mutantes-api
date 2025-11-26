@@ -1,5 +1,5 @@
-# Usa la imagen más estable para la construcción.
-FROM openjdk:21 AS build
+# Usa Eclipse Temurin para la construcción (reemplaza openjdk descontinuado)
+FROM eclipse-temurin:21-jdk AS build
 
 # Establece el directorio de trabajo
 WORKDIR /app
@@ -15,7 +15,7 @@ RUN chmod +x gradlew
 RUN ./gradlew clean build
 
 # --- Segunda Etapa: Ejecución (Usamos la versión JRE más pequeña) ---
-FROM openjdk:21-jre
+FROM eclipse-temurin:21-jre
 
 # Copia el JAR compilado de la etapa 'build'
 COPY --from=build /app/build/libs/mutantes-api-0.0.1-SNAPSHOT.jar app.jar
