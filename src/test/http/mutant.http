@@ -1,0 +1,13 @@
+POST http://localhost:8080/mutant
+Content-Type: application/json
+
+{
+  "dna": [
+    "ATGCGA",
+    "CAGTAC",
+    "TTATTT",
+    "AGACGG",
+    "GCGTCA",
+    "TCACTG"
+  ]
+}
