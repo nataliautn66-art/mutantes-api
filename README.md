@@ -1,10 +1,10 @@
-# 🧬 Proyecto: API de Detección de Mutantes (Examen Mercado Libre)
+ - Proyecto: API de Detección de Mutantes (Examen Mercado Libre)
 
 Este proyecto implementa una API RESTful con **Spring Boot** para determinar si una secuencia de ADN pertenece a un mutante. Cumple con los requisitos del **Nivel 3**, incluyendo la lógica de detección, persistencia en **H2** y el endpoint de estadísticas (`/stats`).
 
 ---
 
-## 🚀 Despliegue en Producción (Render URL)
+- Despliegue en Producción (Render URL)
 
 La API está desplegada y corriendo en un servicio web continuo.
 
@@ -13,13 +13,13 @@ La API está desplegada y corriendo en un servicio web continuo.
 
 ---
 
-## ⚙️ Instrucciones de Ejecución Local
+-  Instrucciones de Ejecución Local
 
 Para ejecutar la API en tu entorno local, necesitas tener instalado **Java 21** (o la versión que uses) y **Gradle**.
 
 1.  **Clonar el Repositorio:**
     ```bash
-    git clone [https://www.youtube.com/watch?v=44ziZ12rJwU](https://www.youtube.com/watch?v=44ziZ12rJwU)
+    git clone [https://github.com/nataliautn66-art/mutantes-api.git](https://github.com/nataliautn66-art/mutantes-api.git)
     cd mutantes-api
     ```
 
@@ -27,23 +27,22 @@ Para ejecutar la API en tu entorno local, necesitas tener instalado **Java 21** 
     ```bash
     ./gradlew bootRun
     ```
-    *La aplicación se iniciará en `http://localhost:8080`.*
 
 ---
 
-## 🧪 Endpoints de la API
+-  Endpoints de la API
 
 | Endpoint | Método | Descripción |
 | :--- | :--- | :--- |
 | `/mutant/` | `POST` | Analiza una secuencia de ADN y la guarda en la base de datos H2. |
 | `/stats` | `GET` | Devuelve las estadísticas de las verificaciones de ADN. |
 
-### 1. Detección de Mutantes (`POST /mutant/`)
+1. Detección de Mutantes (`POST /mutant/`)
 
 * **Ruta:** `/mutant/`
 * **Cuerpo (Body):** Envía el array de ADN en formato JSON.
 
-**Ejemplo de Petición:**
+**Ejemplo:**
 ```json
 {
     "dna": ["ATGCGA", "CAGTGC", "TTATGT", "AGAAGG", "CCCCTA", "TCACTG"]
@@ -65,11 +64,11 @@ JSON
     "count_human_dna": 100,
     "ratio": 0.4
 }
-## 📝 Siguiente Paso: Diagrama de Secuencia y Cobertura
+- Siguiente Paso: Diagrama de Secuencia y Cobertura
 
 Una vez que hayas actualizado el `README.md` en GitHub, continuemos con el siguiente requisito del Nivel 3:
 
-### Paso 2: Crear el Diagrama de Secuencia
+Paso 2: Crear el Diagrama de Secuencia
 
 El requisito del examen es incluir un Diagrama de Secuencia que muestre el flujo del servicio.
 
