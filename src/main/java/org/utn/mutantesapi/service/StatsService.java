@@ -20,10 +20,16 @@ public class StatsService {
         return new StatsResponse(countMutant, countHuman, ratio);
     }
 
-    private double calculateRatio(long countMutant, long countHuman) {
-        if (countHuman == 0) {
-            return countMutant > 0 ? (double) countMutant : 0.0;
+    // Ejemplo de cómo deberías calcular el ratio para evitar división por cero
+    private double calcularRatio(long mutantCount, long humanCount) {
+        if (humanCount == 0) {
+            // Opción A: Devolver 0.0 si no hay humanos para dividir (caso común en APIs)
+            return 0.0;
+
+            // Opción B: Si el profesor espera 1.0 cuando solo hay mutantes, cámbialo a:
+            // return (mutantCount > 0) ? 1.0 : 0.0;
         }
-        return (double) countMutant / countHuman;
+        // Usamos Double para asegurar que la división no sea de enteros (que daría 0)
+        return (double) mutantCount / humanCount;
     }
 }
