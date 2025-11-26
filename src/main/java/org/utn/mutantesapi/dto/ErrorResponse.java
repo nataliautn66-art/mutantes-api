@@ -1,16 +1,47 @@
 package org.utn.mutantesapi.dto;
 
-public class ErrorResponse {
-    private String message;
-    private String details;
+import java.time.LocalDateTime;
 
-    // Constructor con dos parámetros (el que necesitas)
-    public ErrorResponse(String message, String details) {
+public class ErrorResponse {
+    private LocalDateTime timestamp;
+    private int status;
+    private String error;
+    private String message;
+    private String path;
+
+    public ErrorResponse(LocalDateTime timestamp, int status, String error, String message, String path) {
+        this.timestamp = timestamp;
+        this.status = status;
+        this.error = error;
         this.message = message;
-        this.details = details;
+        this.path = path;
     }
 
     // Getters y Setters
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
     public String getMessage() {
         return message;
     }
@@ -19,11 +50,11 @@ public class ErrorResponse {
         this.message = message;
     }
 
-    public String getDetails() {
-        return details;
+    public String getPath() {
+        return path;
     }
 
-    public void setDetails(String details) {
-        this.details = details;
+    public void setPath(String path) {
+        this.path = path;
     }
 }

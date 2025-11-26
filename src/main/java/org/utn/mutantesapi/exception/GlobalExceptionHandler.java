@@ -1,78 +1,61 @@
 package org.utn.mutantesapi.exception;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.utn.mutantesapi.dto.ErrorResponse;
+import org.springframework.web.context.request.WebRequest;
 
 import java.time.LocalDateTime;
 
-/**
- * Manejador global de excepciones.
- * Captura excepciones y las convierte en respuestas HTTP apropiadas.
- */
 @RestControllerAdvice
-@Slf4j
 public class GlobalExceptionHandler {
 
-    /**
-     * Maneja errores de validación (@Valid en el Controller).
-     */
+    @ExceptionHandler(InvalidDnaException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidDnaException(
+            InvalidDnaException ex, WebRequest request) {
+
+        ErrorResponse error = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                "Bad Request",
+                ex.getMessage(),
+                request.getDescription(false).replace("uri=", "")
+        );
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException ex) {
-        String message = ex.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .findFirst()
-                .map(error -> error.getDefaultMessage())
-                .orElse("Invalid DNA sequence");
+    public ResponseEntity<ErrorResponse> handleValidationException(
+            MethodArgumentNotValidException ex, WebRequest request) {
+
+        String message = ex.getBindingResult().getAllErrors().get(0).getDefaultMessage();
 
         ErrorResponse error = new ErrorResponse(
                 LocalDateTime.now(),
                 HttpStatus.BAD_REQUEST.value(),
                 "Bad Request",
                 message,
-                "/mutant"
+                request.getDescription(false).replace("uri=", "")
         );
 
-        log.warn("Validation error: {}", message);
-        return ResponseEntity.badRequest().body(error);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-    /**
-     * Maneja argumentos ilegales.
-     */
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
-        ErrorResponse error = new ErrorResponse(
-                LocalDateTime.now(),
-                HttpStatus.BAD_REQUEST.value(),
-                "Bad Request",
-                ex.getMessage(),
-                "/mutant"
-        );
-
-        log.warn("Illegal argument: {}", ex.getMessage());
-        return ResponseEntity.badRequest().body(error);
-    }
-
-    /**
-     * Maneja cualquier otra excepción no contemplada.
-     */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
+    public ResponseEntity<ErrorResponse> handleGlobalException(
+            Exception ex, WebRequest request) {
+
         ErrorResponse error = new ErrorResponse(
                 LocalDateTime.now(),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "Internal Server Error",
-                "An unexpected error occurred",
-                null
+                ex.getMessage(),
+                request.getDescription(false).replace("uri=", "")
         );
 
-        log.error("Unexpected error", ex);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

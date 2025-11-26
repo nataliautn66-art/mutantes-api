@@ -4,10 +4,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.utn.mutantesapi.dto.DnaRequest;
+import org.utn.mutantesapi.dto.StatsResponse;
 import org.utn.mutantesapi.service.MutantService;
 
 @RestController
-@RequestMapping("/mutant")
 public class MutantController {
 
     private final MutantService mutantService;
@@ -16,9 +16,8 @@ public class MutantController {
         this.mutantService = mutantService;
     }
 
-    @PostMapping
+    @PostMapping("/mutant")
     public ResponseEntity<Void> isMutant(@RequestBody DnaRequest request) {
-
         boolean isMutant = mutantService.isMutant(request.getDna());
 
         if (isMutant) {
@@ -26,5 +25,11 @@ public class MutantController {
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
+    }
+
+    @GetMapping("/stats")
+    public ResponseEntity<StatsResponse> getStats() {
+        StatsResponse stats = mutantService.getStats();
+        return ResponseEntity.ok(stats);
     }
 }
