@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.2.0'
     id 'io.spring.dependency-management' version '1.1.4'
+    id 'jacoco'
 }
 
 group = 'org.utn'
@@ -11,6 +12,14 @@ java {
     sourceCompatibility = '21'
 }
 
+jacoco {
+    toolVersion = "0.8.11" // Puedes usar una versión reciente
+}
+
+test {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport // Esto asegura que el reporte se genere
+}
 configurations {
     compileOnly {
         extendsFrom annotationProcessor

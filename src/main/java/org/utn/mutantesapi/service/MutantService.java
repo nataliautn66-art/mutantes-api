@@ -37,12 +37,11 @@ public class MutantService {
         boolean isMutant = checkMutant(dna);
 
         // Guardar en la base de datos
-        DnaRecord record = new DnaRecord(dnaHash, isMutant);
+        DnaRecord record = new DnaRecord(null, dnaHash, isMutant, LocalDateTime.now());
         repository.save(record);
 
         return isMutant;
     }
-
     private void validateDna(String[] dna) {
         if (dna == null || dna.length == 0) {
             throw new InvalidDnaException("DNA array cannot be null or empty");
