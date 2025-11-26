@@ -1,4 +1,4 @@
-# Usa una imagen base de JDK 21 para la fase de construcción
+# Usa una imagen base de JDK 21 (más general y estable) para la fase de construcción
 FROM openjdk:21 AS build
 
 # Establece el directorio de trabajo
