@@ -13,7 +13,7 @@ public class StatsResponseTest {
         long humanCount = 100L;
         double ratio = 0.4;
 
-        // 1. Constructor vacío y Setters
+        // 1. Constructor vacío y Setters (cubre @NoArgsConstructor y Setters)
         StatsResponse statsSetters = new StatsResponse();
         statsSetters.setCountMutantDna(mutantCount);
         statsSetters.setCountHumanDna(humanCount);
@@ -24,7 +24,7 @@ public class StatsResponseTest {
         assertEquals(humanCount, statsSetters.getCountHumanDna());
         assertEquals(ratio, statsSetters.getRatio());
 
-        // 3. Constructor con argumentos
+        // 3. Constructor con argumentos (cubre @AllArgsConstructor)
         StatsResponse statsArgs = new StatsResponse(mutantCount, humanCount, ratio);
         assertEquals(mutantCount, statsArgs.getCountMutantDna());
     }
